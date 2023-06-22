@@ -2,7 +2,7 @@ from clearml import StorageManager, Dataset
 
 # Create a dataset with ClearML`s Dataset class
 dataset = Dataset.create(
-    dataset_project="FL_MRT", dataset_name="MRT_Raw_Data"
+    dataset_project="FL_Radio", dataset_name="Radio_Raw_Data"
 )
 
 # add the example csv

@@ -12,9 +12,8 @@ from keras.layers import Flatten, Dense
 from tensorflow.keras import Model
 
 app = Flask(__name__)
-SERVER_ADDRESS = "127.0.0.1:8080"
-CLIENT_ID = 0
-data_received = False
+SERVER_ADDRESS = "radio-server.testing:8080"
+CLIENT_ID = 1
 
 image_size = [224, 224]
 batch_size = 28
@@ -37,7 +36,7 @@ batch_size = 28
 
 def load_data():
     train_ds, val_ds = tf.keras.utils.image_dataset_from_directory(
-        "raw_data",
+        f"raw_data/Client{CLIENT_ID}",
         validation_split=0.2,
         subset="both",
         seed=1337,
