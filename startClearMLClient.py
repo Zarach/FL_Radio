@@ -2,7 +2,7 @@ from clearml import Task, Dataset
 
 client_id = 1
 
-task = Task.init(project_name='Radio_MRT', task_name=f'Client {client_number}')
+task = Task.init(project_name='Radio_MRT', task_name=f'Client {client_id}')
 task.execute_remotely(queue_name='default', clone=False, exit_process=True)
 
 
