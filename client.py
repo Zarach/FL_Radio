@@ -35,10 +35,18 @@ batch_size = 28
 #     return results
 
 def load_data():
-    train_ds, val_ds = tf.keras.utils.image_dataset_from_directory(
+    train_ds = tf.keras.utils.image_dataset_from_directory(
         f"raw_data/Client{CLIENT_ID}",
         validation_split=0.2,
-        subset="both",
+        subset="training",
+        seed=1337,
+        image_size=image_size,
+        batch_size=batch_size
+    )
+    val_ds = tf.keras.utils.image_dataset_from_directory(
+        f"raw_data/Client{CLIENT_ID}",
+        validation_split=0.2,
+        subset="validation",
         seed=1337,
         image_size=image_size,
         batch_size=batch_size
