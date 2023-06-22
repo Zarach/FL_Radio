@@ -52,7 +52,9 @@ def load_data():
 # "FL_Data/hh_07"
 # "FL_Data/hh_14"
 @app.route('/startClient', methods=['GET'])
-def start_client():
+def start_client(client_id):
+
+    CLIENT_ID = client_id
     # Make TensorFlow log less verbose
     # metrics.append(tf.keras.metrics.Precision())
     # metrics.append(tf.keras.metrics.Recall())
