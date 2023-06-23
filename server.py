@@ -5,6 +5,7 @@ import tensorflow as tf
 import argparse
 from tensorflow.keras import Model
 from tensorflow.keras.layers import Flatten, Dense, GlobalAveragePooling2D
+import socket
 
 SERVER_ADDRESS = "0.0.0.0:8080"
 
@@ -57,3 +58,6 @@ if __name__ == '__main__':
     print(args)
 
     start_server(args.min_fit_clients, args.min_evaluate_clients, args.min_available_clients)
+    hostname = socket.gethostname()
+    IPAddr = socket.gethostbyname(hostname)
+    print('Server running on ' + IPAddr)
