@@ -53,5 +53,7 @@ if __name__ == '__main__':
     parser.add_argument("--min-available-clients", default=1)
 
     args = parser.parse_args()
+    
+    print(args)
 
     start_server(args.min_fit_clients, args.min_evaluate_clients, args.min_available_clients)

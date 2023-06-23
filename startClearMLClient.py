@@ -7,6 +7,8 @@ parser.add_argument("--client-id", default=1)
 
 args = parser.parse_args()
 
+print(args)
+    
 task = Task.init(project_name='Radio_MRT', task_name=f'Client {args.client_id}')
 task.execute_remotely(queue_name='default', clone=False, exit_process=True)
 
