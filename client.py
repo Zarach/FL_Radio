@@ -4,6 +4,7 @@ import tensorflow as tf
 from keras.layers import Flatten, Dense
 from tensorflow.keras import Model
 
+
 image_size = [224, 224]
 batch_size = 28
 
@@ -89,8 +90,15 @@ def start_client(client_id = 1, server_address = "radio-server.testing:8080"):
     }
 
 if __name__ == '__main__':
-   # app.run()
-   start_client()
+    import argparse
+
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--server-address", default="radio-server.testing:8080")
+    parser.add_argument("--client-id", default=1)
+
+    args = parser.parse_args()
+    
+    start_client(args.client_id, args.server_address)
 
 
 
