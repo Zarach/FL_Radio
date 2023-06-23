@@ -84,21 +84,4 @@ def start_client(client_id = 1, server_address = "radio-server.testing:8080"):
     client = Client()
     fl.client.start_numpy_client(server_address=server_address, client=client)
 
-    return {
-        'statusCode': 200,
-        'body': 'Client finished'
-    }
-
-if __name__ == '__main__':
-    import argparse
-
-    parser = argparse.ArgumentParser()
-    parser.add_argument("--server-address", default="radio-server.testing:8080")
-    parser.add_argument("--client-id", default=1)
-
-    args = parser.parse_args()
-    
-    start_client(args.client_id, args.server_address)
-
-
 
