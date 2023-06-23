@@ -2,10 +2,18 @@ import flwr as fl
 from typing import List, Tuple
 from flwr.common import Metrics
 import tensorflow as tf
+import argparse
 from tensorflow.keras import Model
 from tensorflow.keras.layers import Flatten, Dense, GlobalAveragePooling2D
 
 SERVER_ADDRESS = "0.0.0.0:8080"
+
+parser = argparse.ArgumentParser()
+parser.add_argument("--min-fit-clients", default=1)
+parser.add_argument("--min-evaluate-clients", default=1)
+parser.add_argument("--min-available-clients", default=1)
+
+args = parser.parse_args()
 
 def create_model():
     base_model = tf.keras.applications.resnet.ResNet101(classes=2, include_top=False, pooling='avg')
@@ -29,9 +37,9 @@ net = create_model()
 strategy = fl.server.strategy.FedAvg(
     fraction_fit=1.0,
     fraction_evaluate=1.0,
-    min_fit_clients=1,
-    min_evaluate_clients=1,
-    min_available_clients=1#,
+    min_fit_clients=args.min_fit_clients,
+    min_evaluate_clients=args.min_evaluate_clients,
+    min_available_clients=args.min_available_clients,
     #initial_parameters=fl.common.ndarrays_to_parameters(params)
     # evaluate_metrics_aggregation_fn=weighted_average,
     # fit_metrics_aggregation_fn=weighted_average

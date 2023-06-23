@@ -1,24 +1,11 @@
-import datetime
-import os
-
-from collections import OrderedDict
-
 import flwr as fl
 
-import numpy as np
-from flask import Flask, request
 import tensorflow as tf
 from keras.layers import Flatten, Dense
 from tensorflow.keras import Model
 
-app = Flask(__name__)
-SERVER_ADDRESS = "radio-server.testing:8080"
-CLIENT_ID = 1
-
 image_size = [224, 224]
 batch_size = 28
-
-
 
 # def eval_net(opt):
 #     save_dir = increment_path(Path("runs/eval/") / opt.name)
@@ -34,9 +21,9 @@ batch_size = 28
 #
 #     return results
 
-def load_data():
+def load_data(client_id):
     train_ds = tf.keras.utils.image_dataset_from_directory(
-        f"raw_data/Client{CLIENT_ID}",
+        f"raw_data/Client{client_id}",
         validation_split=0.2,
         subset="training",
         seed=1337,
@@ -44,7 +31,7 @@ def load_data():
         batch_size=batch_size
     )
     val_ds = tf.keras.utils.image_dataset_from_directory(
-        f"raw_data/Client{CLIENT_ID}",
+        f"raw_data/Client{client_id}",
         validation_split=0.2,
         subset="validation",
         seed=1337,
@@ -55,14 +42,7 @@ def load_data():
 
 
 
-# Use one of the following URLs per Client
-# "FL_Data/hh_01"
-# "FL_Data/hh_07"
-# "FL_Data/hh_14"
-@app.route('/startClient', methods=['GET'])
-def start_client(client_id):
-
-    CLIENT_ID = client_id
+def start_client(client_id = 1, server_address = "radio-server.testing:8080"):
     # Make TensorFlow log less verbose
     # metrics.append(tf.keras.metrics.Precision())
     # metrics.append(tf.keras.metrics.Recall())
@@ -77,7 +57,7 @@ def start_client(client_id):
         metrics=["accuracy"],
     )
 
-    train_ds, val_ds = load_data()
+    train_ds, val_ds = load_data(client_id)
 
 
     # Define Flower client
@@ -101,7 +81,7 @@ def start_client(client_id):
 
     # Start Flower client
     client = Client()
-    fl.client.start_numpy_client(server_address=SERVER_ADDRESS, client=client)
+    fl.client.start_numpy_client(server_address=server_address, client=client)
 
     return {
         'statusCode': 200,
