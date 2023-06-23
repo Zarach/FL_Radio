@@ -56,8 +56,10 @@ if __name__ == '__main__':
     args = parser.parse_args()
     
     print(args)
-
-    start_server(args.min_fit_clients, args.min_evaluate_clients, args.min_available_clients)
+    
     hostname = socket.gethostname()
     IPAddr = socket.gethostbyname(hostname)
     print('Server running on ' + IPAddr)
+    
+    start_server(args.min_fit_clients, args.min_evaluate_clients, args.min_available_clients)
+
