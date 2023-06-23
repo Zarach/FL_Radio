@@ -1,8 +1,11 @@
+import datetime
+
 import flwr as fl
 
 import tensorflow as tf
 from keras.layers import Flatten, Dense
 from tensorflow.keras import Model
+from tensorflow.keras.callbacks import TensorBoard
 
 
 image_size = [224, 224]
@@ -49,6 +52,8 @@ def start_client(client_id = 1, server_address = "radio-server.testing:8080"):
     # metrics.append(tf.keras.metrics.Recall())
 
     base_model = tf.keras.applications.resnet.ResNet101(classes=2, include_top=False, pooling='avg')
+    for layer in base_model.layers:
+        layer.trainable = False
     head_model = Flatten()(base_model.output)
     head_model = Dense(1, activation='sigmoid')(head_model)
     model = Model(inputs=base_model.input, outputs=head_model)
@@ -60,6 +65,8 @@ def start_client(client_id = 1, server_address = "radio-server.testing:8080"):
 
     train_ds, val_ds = load_data(client_id)
 
+    logdir = "logs/scalars/" + datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
+    tensorboard_callback = TensorBoard(log_dir=logdir)
 
     # Define Flower client
     class Client(fl.client.NumPyClient):
@@ -69,7 +76,7 @@ def start_client(client_id = 1, server_address = "radio-server.testing:8080"):
 
         def fit(self, parameters, config):
             model.set_weights(parameters)
-            model.fit(train_ds, epochs=1, batch_size=batch_size, steps_per_epoch=3)
+            model.fit(train_ds, epochs=5, batch_size=batch_size, steps_per_epoch=3, callbacks=[tensorboard_callback])
             len = train_ds.cardinality().numpy()
             weights = model.get_weights()
             return weights, int(len), {}
